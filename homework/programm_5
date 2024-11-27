@@ -1,0 +1,65 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+void inputMatrix(float *matrix, int rows, int cols);
+
+void transposeMatrix(float *matrix, float *transposed, int rows, int cols);
+
+void printMatrix(float *matrix, int rows, int cols);
+
+int main(){
+    int rows, cols;
+
+    printf("Enter the number of rows in the matrix: ");
+    scanf("%d", &rows);
+    printf("Enter the number of columns in the matrix: ");
+    scanf("%d", &cols);
+
+    float *matrix = (float *)malloc(rows * cols * sizeof(float));
+    float *transposed = (float *)malloc(cols * rows * sizeof(float));
+    if (matrix == NULL || transposed == NULL){
+        fprintf(stderr, "Memory allocation error\n");
+        return 1;
+    }
+
+    inputMatrix(matrix, rows, cols);
+
+    printMatrix(matrix, rows, cols);
+
+    transposeMatrix(matrix, transposed, rows, cols);
+
+    printf("Transposed Matrix:\n");
+    printMatrix(transposed, cols, rows);
+
+    free(matrix);
+    free(transposed);
+
+    return 0;
+}
+void inputMatrix(float *matrix, int rows, int cols){
+    printf("Enter elements of %dx%d matrix:\n", rows, cols);
+    for (int i = 0; i < rows; i++){
+        for (int j = 0; j < cols; j++){
+            printf("Element [%d][%d]: ", i + 1, j + 1);
+            scanf("%f", &matrix[i * cols + j]);
+        }
+    }
+}
+
+void transposeMatrix(float *matrix, float *transposed, int rows, int cols){
+    for (int i = 0; i < rows; i++){
+        for (int j = 0; j < cols; j++){
+            transposed[j * rows + i] = matrix[i * cols + j];
+        }
+    }
+}
+
+void printMatrix(float *matrix, int rows, int cols){
+    printf("Matrix:\n");
+    for (int i = 0; i < rows; i++){
+        for (int j = 0; j < cols; j++){
+            printf("%.2f ", matrix[i * cols + j]);
+        }
+        printf("\n");
+    }
+}
