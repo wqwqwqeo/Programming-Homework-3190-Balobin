@@ -1,0 +1,23 @@
+#include <stdio.h>
+
+typedef struct{
+    float x;
+    float y;
+} Point;
+
+float triangleArea(Point a, Point b, Point c){
+    return 0.5 * ((a.x * (b.y - c.y)) + (b.x * (c.y - a.y)) + (c.x * (a.y - b.y)));
+}
+
+int main(){
+    Point a, b, c;
+    printf("Enter the coordinates of the first vertex (x1 y1): ");
+    scanf("%f %f", &a.x, &a.y);
+    printf("Enter the coordinates of the second vertex (x2 y2): ");
+    scanf("%f %f", &b.x, &b.y);
+    printf("Enter the coordinates of the third vertex (x3 y3): ");
+    scanf("%f %f", &c.x, &c.y);
+    float area = triangleArea(a, b, c);
+    printf("Area of the triangle: %.2f\n", area);
+    return 0;
+}
