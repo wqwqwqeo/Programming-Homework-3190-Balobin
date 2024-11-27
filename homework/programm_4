@@ -1,0 +1,98 @@
+#include <stdio.h>
+#include <math.h>
+
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
+
+void initPoint(int *mas, int length);
+void printPoint(int *mas, int length);
+double lengthOfTwoPoint(int x1, int y1, int x2, int y2);
+double calcAngleOfTwoLine(int x1, int y1, int x2, int y2, int x3, int y3);
+
+int main(){
+    printf("Enter coordinates for 4 points (format: x1 y1 x2 y2 x3 y3 x4 y4):\n");
+    int coordMas[8];
+    initPoint(coordMas, 8);
+
+    double side1 = lengthOfTwoPoint(coordMas[0], coordMas[1], coordMas[2], coordMas[3]); 
+    double side2 = lengthOfTwoPoint(coordMas[2], coordMas[3], coordMas[4], coordMas[5]); 
+    double side3 = lengthOfTwoPoint(coordMas[4], coordMas[5], coordMas[6], coordMas[7]); 
+    double side4 = lengthOfTwoPoint(coordMas[6], coordMas[7], coordMas[0], coordMas[1]); 
+
+    double angle1 = calcAngleOfTwoLine(coordMas[0], coordMas[1], coordMas[2], coordMas[3], coordMas[4], coordMas[5]); 
+    double angle2 = calcAngleOfTwoLine(coordMas[2], coordMas[3], coordMas[4], coordMas[5], coordMas[6], coordMas[7]); 
+
+    printPoint(coordMas, 8);
+
+    if (side1 == side3 && side2 == side4){
+        if (side1 == side2){
+            if (angle1 == 90.0 && angle2 == 90.0){
+                printf("It is a square.\n");
+            }
+            else{
+                printf("It is a rhombus.\n");
+            }
+        }
+        else if (angle1 == 90.0 && angle2 == 90.0){
+            printf("It is a rectangle.\n");
+        }
+        else{
+            printf("It is a parallelogram.\n");
+        }
+    }
+    else{
+        printf("It is another type of quadrilateral.\n");
+    }
+
+    return 0;
+}
+
+void initPoint(int *mas, int length){
+    for (int i = 0; i < length; i += 2){
+        printf("Enter coordinates for point %d (x y): ", (i / 2) + 1);
+        while (1){
+            int result = scanf("%d %d", &mas[i], &mas[i + 1]);
+            if (result == 2){
+                break;
+            }
+            else{
+                printf("Input error! Please enter two integers for point %d (x y): ", (i / 2) + 1);
+                while (getchar() != '\n');
+                    
+            }
+        }
+    }
+}
+
+void printPoint(int *mas, int length){
+    for (int i = 0; i < length; i += 2){
+        printf("Point %d: (%d, %d)\n", (i / 2) + 1, mas[i], mas[i + 1]);
+    }
+}
+
+double lengthOfTwoPoint(int x1, int y1, int x2, int y2){
+    return sqrt(pow(x2 - x1, 2) + pow(y2 - y1, 2));
+}
+
+double calcAngleOfTwoLine(int x1, int y1, int x2, int y2, int x3, int y3){
+    int ax = x2 - x1;
+    int ay = y2 - y1;
+    int bx = x3 - x2;
+    int by = y3 - y2;
+    double dotProduct = ax * bx + ay * by;
+    double lenA = sqrt(ax * ax + ay * ay);
+    double lenB = sqrt(bx * bx + by * by);
+
+    if (lenA == 0 || lenB == 0){
+        return 0;
+    }
+
+    double cosAngle = dotProduct / (lenA * lenB);
+    if (cosAngle < -1.0)
+        cosAngle = -1.0;
+    if (cosAngle > 1.0)
+        cosAngle = 1.0;
+
+    return acos(cosAngle) * 180.0 / M_PI;
+}
