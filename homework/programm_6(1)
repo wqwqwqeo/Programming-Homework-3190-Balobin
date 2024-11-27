@@ -1,0 +1,63 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+void inputMatrix(float **matrix, int rows, int cols);
+
+float calculateAverage(float **matrix, int rows, int cols);
+
+void freeMatrix(float **matrix, int rows);
+
+int main(){
+    int rows, cols;
+
+    printf("Enter the number of rows in the matrix: ");
+    scanf("%d", &rows);
+    printf("Enter the number of cols in the matrix: ");
+    scanf("%d", &cols);
+
+    float **matrix = (float **)malloc(rows * sizeof(float *));
+    for (int i = 0; i < rows; i++){
+        matrix[i] = (float *)malloc(cols * sizeof(float));
+    }
+
+    if (matrix == NULL){
+        fprintf(stderr, "Memory allocation error\n");
+        return 1;
+    }
+
+    inputMatrix(matrix, rows, cols);
+    float average = calculateAverage(matrix, rows, cols);
+
+    printf("The average of all elements in the matrix is: %.2f\n", average);
+
+    freeMatrix(matrix, rows);
+
+    return 0;
+}
+
+void inputMatrix(float **matrix, int rows, int cols){
+    printf("Enter elements of %dx%d matrix:\n", rows, cols);
+    for (int i = 0; i < rows; i++){
+        for (int j = 0; j < cols; j++){
+            printf("Element [%d][%d]: ", i + 1, j + 1);
+            scanf("%f", &matrix[i][j]);
+        }
+    }
+}
+
+float calculateAverage(float **matrix, int rows, int cols){
+    float sum = 0.0;
+    for (int i = 0; i < rows; i++){
+        for (int j = 0; j < cols; j++){
+            sum += matrix[i][j];
+        }
+    }
+    return sum / (rows * cols);
+}
+
+void freeMatrix(float **matrix, int rows){
+    for (int i = 0; i < rows; i++){
+        free(matrix[i]);
+    }
+    free(matrix);
+}
