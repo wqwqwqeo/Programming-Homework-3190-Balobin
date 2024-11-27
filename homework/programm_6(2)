@@ -1,0 +1,43 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+int main() {
+    char *str = NULL;
+    size_t len = 0;
+    ssize_t read;
+
+    printf("Enter a string (letters only):\n");
+
+    read = getline(&str, &len, stdin);
+    if (read == -1) {
+        fprintf(stderr, "Error reading input.\n");
+        return 1;
+    }
+
+    int charCount[256] = {0};
+
+    for (size_t i = 0; str[i] != '\0'; i++) {
+        char ch = str[i];
+        if (ch >= 'A' && ch <= 'Z') ch += 32;
+        if (ch >= 'a' && ch <= 'z') {
+            charCount[ch]++;
+        }
+    }
+
+    printf("Repeating characters and counts:\n");
+    int repeatingCount = 0;
+    for (int i = 0; i < 256; i++) {
+        if (charCount[i] > 1) {
+            printf("%c: %d\n", i, charCount[i]);
+            repeatingCount++;
+        }
+    }
+
+    if (repeatingCount == 0) {
+        printf("No repeating characters found.\n");
+    }
+
+    free(str);
+    return 0;
+}
