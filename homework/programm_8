@@ -1,0 +1,117 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
+#include <stdbool.h>
+
+bool validate_numeric_strings(const char *num1, const char *num2);
+
+void addition(const char *num1, const char *num2, char *result);
+void subtraction(const char *num1, const char *num2, char *result);
+void multiplication(const char *num1, const char *num2, char *result);
+void division(const char *num1, const char *num2, char *result);
+
+int main() {
+    char num1[101], num2[101], operation;
+    char result[101];
+
+    printf("Enter the first number: ");
+    scanf("%100s", num1);
+
+    printf("Enter the second number: ");
+    scanf("%100s", num2);
+
+    if (!validate_numeric_strings(num1, num2)) {
+        return EXIT_FAILURE;
+    }
+
+    printf("Enter the operation (+, -, *, /): ");
+    scanf(" %c", &operation);
+
+    switch (operation) {
+    case '+':
+        addition(num1, num2, result);
+        break;
+    case '-':
+        subtraction(num1, num2, result);
+        break;
+    case '*':
+        multiplication(num1, num2, result);
+        break;
+    case '/':
+        division(num1, num2, result);
+        break;
+    default:
+        fprintf(stderr, "Error: Unsupported operation '%c'.\n", operation);
+        return EXIT_FAILURE;
+    }
+
+    printf("Result: %s\n", result);
+
+    return 0;
+}
+
+bool validate_numeric_strings(const char *num1, const char *num2) {
+    if (strlen(num1) != strlen(num2)) {
+        fprintf(stderr, "Error: Numbers must have the same length.\n");
+        return false;
+    }
+    int length = strlen(num1);
+    for (int i = 0; i < length; i++) {
+        if (!isdigit(num1[i]) || !isdigit(num2[i])) {
+            fprintf(stderr, "Error: Both inputs must be numeric strings of the same length.\n");
+            return false;
+        }
+    }
+    return true;
+}
+
+void addition(const char *num1, const char *num2, char *result) {
+    int length = strlen(num1);
+    for (int i = 0; i < length; i++) {
+        int digit1 = num1[i] - '0';
+        int digit2 = num2[i] - '0';
+        int res = digit1 + digit2;
+        result[i] = (res >= 0 && res < 10) ? (res + '0') : 'X';
+    }
+    result[length] = '\0';
+}
+
+void subtraction(const char *num1, const char *num2, char *result) {
+    int length = strlen(num1);
+    for (int i = 0; i < length; i++) {
+        int digit1 = num1[i] - '0';
+        int digit2 = num2[i] - '0';
+        int res = digit1 - digit2;
+        result[i] = (res >= 0 && res < 10) ? (res + '0') : 'X';
+    }
+    result[length] = '\0';
+}
+
+void multiplication(const char *num1, const char *num2, char *result) {
+    int length = strlen(num1);
+    for (int i = 0; i < length; i++) {
+        int digit1 = num1[i] - '0';
+        int digit2 = num2[i] - '0';
+        int res = digit1 * digit2;
+        result[i] = (res >= 0 && res < 10) ? (res + '0') : 'X';
+    }
+    result[length] = '\0';
+}
+
+void division(const char *num1, const char *num2, char *result) {
+    int length = strlen(num1);
+    for (int i = 0; i < length; i++) {
+        int digit1 = num1[i] - '0';
+        int digit2 = num2[i] - '0';
+        if (digit2 == 0) {
+            fprintf(stderr, "Error: Division by zero in position %d.\n", i);
+            result[i] = 'X';
+        }
+        else {
+            int res = digit1 / digit2;
+            result[i] = (res >= 0 && res < 10) ? (res + '0') : 'X';
+        }
+    }
+    result[length] = '\0';
+}
